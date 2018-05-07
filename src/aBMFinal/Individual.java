@@ -89,7 +89,10 @@ public class Individual {
 	}
 	
 	
-	
+	/** The individual makes friends at university, which serve as valuable connections based on their parent's current employer 
+	in the job search. Based on the probablility of making friends and the size of the university, a number of individuals are 
+	added to the social network as friends. 
+	@return void */
 	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=90)
 	public void makeFriends() {
 		for(Individual i:this.almaMater.alumni) {
