@@ -10,8 +10,8 @@ import repast.simphony.space.grid.Grid;
 
 // Instance Variables
 public class Individual {
-	static float propInheritance;
-	static float riskAversion;
+	static float propInheritance=0;
+	static float riskAversion=0;
 	
 	double wealth;
 	double talent;
@@ -25,8 +25,6 @@ public class Individual {
 	
 	// Constructor
 	public Individual(Grid<Object> grid) {
-	//public Individual() {
-		// TODO Auto-generated constructor stub
 		this.wealth = RandomHelper.nextDoubleFromTo(0, 10000);	// TODO chi squared distribution
 		this.talent = RandomHelper.nextDoubleFromTo(0, 100);	// TODO Pareto
 		this.grid = grid;
@@ -34,7 +32,7 @@ public class Individual {
 	}
 	
 	// Methods
-	
+/*	
 	public double valUniversity(University u) {
 		return u.meanTalentDist - riskAversion*u.varianceTalentDist;
 	}
@@ -79,5 +77,5 @@ public class Individual {
 		}
 	}
 
-	
+*/	
 }

@@ -1,16 +1,15 @@
 package aBMFinal;
 
-import java.util.ArrayList;
-
 import repast.simphony.context.Context;
 import repast.simphony.context.space.grid.GridFactory;
 import repast.simphony.context.space.grid.GridFactoryFinder;
+import repast.simphony.dataLoader.ContextBuilder;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridBuilderParameters;
 import repast.simphony.space.grid.SimpleGridAdder;
 import repast.simphony.space.grid.WrapAroundBorders;
 
-public class Builder {
+public class Builder implements ContextBuilder<Object> {
 	
 	public Context build(Context<Object> context) {
 		context.setId("ABMFinal");
@@ -32,15 +31,15 @@ public class Builder {
 */
 		 //(minTalent, minWealth, meanTalentDist, varianceTalentdist)
 		
-		context.add(new University(grid, 0, 0, 0, 10)); // IPN
+		//context.add(new University(grid, 0, 0, 0, 10)); // IPN
 		
-		context.add(new University(grid, 20, 0, 50, 50)); // UNAM
+		//context.add(new University(grid, 20, 0, 50, 50)); // UNAM
 		
-		context.add(new University(grid, 40, 8000, 50, 10)); // ITAM
+		//context.add(new University(grid, 40, 8000, 50, 10)); // ITAM
 		
-		context.add(new University(grid, 10, 8000, 10, 10)); // Anahuac
+		//context.add(new University(grid, 10, 8000, 10, 10)); // Anahuac
 		
-		context.add(new University(grid, 40, 5000, 30, 20)); // Ibero
+		//context.add(new University(grid, 40, 5000, 30, 20)); // Ibero
 
 /*
 		ArrayList<University> Campuses = new ArrayList<University>();
@@ -62,9 +61,9 @@ public class Builder {
 		
 		
 */
-		for(int i=0; i<20; i++) {
-			context.add(new Firms(grid, 10000-500*i));
-		}
+		//for(int i=0; i<20; i++) {
+		//	context.add(new Firms(grid, 10000-500*i));
+		//}
 		
 		
 		return context;
