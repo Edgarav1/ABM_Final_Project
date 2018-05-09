@@ -12,37 +12,38 @@ import repast.simphony.space.grid.Grid;
 /** Class for all individuals which study, then work. 
 */
 public class Individual {
-<<<<<<< HEAD
-	static float propInheritance=0;
-	static float riskAversion=0;
-	
-=======
+
 	/** Gives the proportion of an individuals characteristics which are passed onto the next generation; wealth, talent, network */
 	static float propInheritance;
+	
 	/** Risk aversion in choosing universities: Describes the amount which individuals discount a university's mean talent 
 	by its variance */
 	static float riskAversion;
+	
 	/** Gives the wealth of the individual; at the start of his/her life wealth is an inherited proportion of their parent's wealth,
 	which then is modified by the salary obtained after college. */
->>>>>>> b66fc0f3e056d785145d7303b8aaa44f2366a07c
 	double wealth;
+	
 	/** Talent is an exogenous value inheritied partially from parents which is then modified by attending university. */
 	double talent;
+	
 	/** Records the university which an individual attended */
 	University almaMater;
+	
 	/** The social network comprises of friends that an individual made in college which later serve to provide valuable connections 
 	in the hiring process */
 	ArrayList<Individual> socialNetwork;
+	
 	/** The parent's employer serves as the link of value between friendships made in college and connections that help an individual to be hired 
 	by higher paying firms in the job search. It is the link between the working generation and the generation searching for work */
 	Firms parentEmployer;
+	
 	/** Records the firm which hires an individual, and serves at the relevant network for the next generation when they are looking for
 	advantageous contacts */
 	Firms currentEmployer;
 	
 	public Grid grid;
 	
-	// Constructor
 	/** Constructor of the individual class */
 	public Individual(Grid<Object> grid) {
 		this.wealth = RandomHelper.nextDoubleFromTo(0, 10000);	// TODO chi squared distribution
@@ -52,13 +53,10 @@ public class Individual {
 	}
 	
 	// Methods
-<<<<<<< HEAD
-/*	
-=======
+
 	/** Valuation of a potential alma mater. The individual evaluates potential schools based on the mean talent that they give to alumni
 	discounted by their risk aversion multiplied by the variance of that talent distribution 
 	@return double */
->>>>>>> b66fc0f3e056d785145d7303b8aaa44f2366a07c
 	public double valUniversity(University u) {
 		return u.meanTalentDist - riskAversion*u.varianceTalentDist;
 	}
@@ -87,6 +85,7 @@ public class Individual {
 		
 		return choice;
 	} // End method
+	
 	/** Bestows updated talent on the individual based on their choice of university. The individual is given a random draw from the distribution
 	of their university which is added to their initial talent.
 	@return void */
@@ -98,7 +97,7 @@ public class Individual {
 	
 	
 	/** The individual makes friends at university, which serve as valuable connections based on their parent's current employer 
-	in the job search. Based on the probablility of making friends and the size of the university, a number of individuals are 
+	in the job search. Based on the probability of making friends and the size of the university, a number of individuals are 
 	added to the social network as friends. 
 	@return void */
 	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=90)
@@ -110,5 +109,5 @@ public class Individual {
 		}
 	}
 
-*/	
-}
+
+} // End class

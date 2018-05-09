@@ -29,7 +29,6 @@ public class Firms {
 	
 	public Grid grid;
 	
-	// Contructor
 	/** Constructor of the class Firms.
 	@param salary Salary offered by the firm */
 	public Firms (Grid<Object> grid, double salary) {
@@ -61,7 +60,7 @@ public class Firms {
 			return  i.talent - RandomHelper.nextDouble()*(1 - numberAcquaintance(i)/pastWorkers.size() )*i.almaMater.varianceTalentDist;
 		}
 	} // End valIndividual
-<<<<<<< HEAD
+
 	
 	public LinkedHashMap<Individual, Double> sortHashMapByValues(
 	        HashMap<Individual, Double> passedMap) {
@@ -95,12 +94,11 @@ public class Firms {
 	
 	
 	
-=======
+
 	/** Hires workers. This method searches over workers and chooses the employees based on their value from valIndividual. 
 	The available prospects with the highest values are chosen, then taken out from consideration
 	for the rest of the firms hiring process. 
 	@return void */
->>>>>>> b66fc0f3e056d785145d7303b8aaa44f2366a07c
 	@ScheduledMethod(start=1, interval=1, shuffle=false, priority=80)
 	public void hireWorkers() {
 		//ArrayList<Individual> remainingProspects= new ArrayList<Individual>();
