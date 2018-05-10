@@ -34,6 +34,8 @@ public class Firms {
 	public Firms (Grid<Object> grid, double salary) {
 		this.grid = grid;
 		this.salary = salary;
+		this.pastWorkers = new ArrayList<Individual>();
+		this.contacts = new ArrayList<University>();
 	}
 	
 	// Methods
@@ -50,14 +52,15 @@ public class Firms {
 		return counter;
 	}
 	/** Assigns a numeric value to a prospective employee based on expected talent and connections. 
-	This number is used to rank and hire employees. 
+	This number is used to rank and hire employees.
+	Note: valuation is done in reverse number (most valuable worker has the smallest value) so to make easier the sorting of workers
 	@return double */
 	public double valIndividual(Individual i) {
 		if(i.parentEmployer == null) {
-			return i.talent - RandomHelper.nextDouble()*i.almaMater.varianceTalentDist;
+			return -(i.talent - RandomHelper.nextDouble()*i.almaMater.varianceTalentDist);
 		}
 		else {
-			return  i.talent - RandomHelper.nextDouble()*(1 - numberAcquaintance(i)/pastWorkers.size() )*i.almaMater.varianceTalentDist;
+			return  -(i.talent - RandomHelper.nextDouble()*(1 - numberAcquaintance(i)/pastWorkers.size() )*i.almaMater.varianceTalentDist);
 		}
 	} // End valIndividual
 
@@ -119,19 +122,22 @@ public class Firms {
 				break;
 			}
 			
-			for(HashMap.Entry<Individual, Double> entry2: sortedWorkers.entrySet()) {
-				System.out.println(entry2.getKey() + "/" + entry2.getValue());
-			}
 		}
-		
-	}
+/*
+		for(HashMap.Entry<Individual, Double> entry2: sortedWorkers.entrySet()) {
+			System.out.println(entry2.getKey() + "/" + entry2.getValue());
+		}
+*/
+	} // End method
 	
+/*
 	@ScheduledMethod(start=1, interval=1, shuffle=false, priority=20)
 	public void printHiredWorkers() {
 		for (Individual i: pastWorkers) {
 			System.out.printf("%s", valIndividual(i));
 		}
 	}
+*/
 	
 	
 	

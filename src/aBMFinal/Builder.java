@@ -31,15 +31,15 @@ public class Builder implements ContextBuilder<Object> {
 */
 		 //(minTalent, minWealth, meanTalentDist, varianceTalentdist)
 		
-		//context.add(new University(grid, 0, 0, 0, 10)); // IPN
+		context.add(new University(grid, 0, 0, 0, 10)); // IPN
 		
-		//context.add(new University(grid, 20, 0, 50, 50)); // UNAM
+		context.add(new University(grid, 20, 0, 50, 50)); // UNAM
 		
-		//context.add(new University(grid, 40, 8000, 50, 10)); // ITAM
+		context.add(new University(grid, 40, 8000, 50, 10)); // ITAM
 		
-		//context.add(new University(grid, 10, 8000, 10, 10)); // Anahuac
+		context.add(new University(grid, 10, 8000, 10, 10)); // Anahuac
 		
-		//context.add(new University(grid, 40, 5000, 30, 20)); // Ibero
+		context.add(new University(grid, 40, 5000, 30, 20)); // Ibero
 
 /*
 		ArrayList<University> Campuses = new ArrayList<University>();
@@ -61,9 +61,9 @@ public class Builder implements ContextBuilder<Object> {
 		
 		
 */
-		//for(int i=0; i<20; i++) {
-		//	context.add(new Firms(grid, 10000-500*i));
-		//}
+		for(int i=0; i<20; i++) {
+			context.add(new Firms(grid, 10000-500*i));
+		}
 		
 		
 		return context;

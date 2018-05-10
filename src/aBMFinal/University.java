@@ -34,6 +34,7 @@ public class University {
 		this.meanTalentDist = meanTalentDist;
 		this.varianceTalentDist = varianceTalentDist;
 		this.grid = grid;
+		this.alumni = new ArrayList<Individual>();
 		
 	}
 	

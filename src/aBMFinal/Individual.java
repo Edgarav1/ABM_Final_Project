@@ -8,17 +8,18 @@ import repast.simphony.random.RandomHelper;
 import repast.simphony.space.grid.Grid;
 
 
-// Instance Variables
 /** Class for all individuals which study, then work. 
 */
 public class Individual {
 
+	// Instance Variables
+	
 	/** Gives the proportion of an individuals characteristics which are passed onto the next generation; wealth, talent, network */
 	static float propInheritance;
 	
 	/** Risk aversion in choosing universities: Describes the amount which individuals discount a university's mean talent 
 	by its variance */
-	static float riskAversion;
+	static double riskAversion=0;
 	
 	/** Gives the wealth of the individual; at the start of his/her life wealth is an inherited proportion of their parent's wealth,
 	which then is modified by the salary obtained after college. */
@@ -46,11 +47,20 @@ public class Individual {
 	
 	/** Constructor of the individual class */
 	public Individual(Grid<Object> grid) {
-		this.wealth = RandomHelper.nextDoubleFromTo(0, 10000);	// TODO chi squared distribution
-		this.talent = RandomHelper.nextDoubleFromTo(0, 100);	// TODO Pareto
+		RandomHelper.createChiSquare(2);
+		this.wealth = 5000*RandomHelper.getChiSquare().nextDouble();
+		// this.wealth = RandomHelper.nextDoubleFromTo(0, 10000);	//
+		
+		RandomHelper.createChiSquare(3);
+		this.talent = 50*RandomHelper.getChiSquare().nextDouble()/3;
+		// this.talent = RandomHelper.nextDoubleFromTo(0, 100);	// TODO Pareto
+		
 		this.grid = grid;
 		
+		this.socialNetwork = new ArrayList<Individual>();
+		
 	}
+	
 	
 	// Methods
 
@@ -60,6 +70,7 @@ public class Individual {
 	public double valUniversity(University u) {
 		return u.meanTalentDist - riskAversion*u.varianceTalentDist;
 	}
+	
 	
 	/** After evaluating the universities, this method allows an individual to choose a university based on the maximum valuation
 	Then the individual adds the university as their alma mater and the university adds the individual as an alumni. 
@@ -86,13 +97,16 @@ public class Individual {
 		return choice;
 	} // End method
 	
+	
 	/** Bestows updated talent on the individual based on their choice of university. The individual is given a random draw from the distribution
 	of their university which is added to their initial talent.
 	@return void */
 	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=100)
-	public void gainTalent(Random random) {
+	public void gainTalent() {
 		University choice = chooseUniversity();
-		this.talent += random.nextGaussian()*choice.varianceTalentDist + choice.meanTalentDist;
+		RandomHelper.createNormal(almaMater.meanTalentDist, almaMater.varianceTalentDist);
+		this.talent += RandomHelper.getNormal().nextDouble();
+		// this.talent += random.nextGaussian()*choice.varianceTalentDist + choice.meanTalentDist;
 	}
 	
 	
