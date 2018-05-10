@@ -12,25 +12,40 @@ import java.util.Random;
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.random.RandomHelper;
 import repast.simphony.space.grid.Grid;
+
 /** The class Firms is used for all firms in the model. 
-@author Hackett, Avalos, Morales */
+ * 	@author Hackett, Avalos, Morales 
+ */
 public class Firms {
 	
 	// Instance variables
-	/** Gives the minimum value a worker must have in order to work at a given firm */
+	
+/** 
+ * Gives the minimum value a worker must have in order to work at a given firm 
+ */
 	double minVal;
-	/** Salary offered by the firm; salary is unique to the firm */
+	
+/** Salary offered by the firm; salary is unique to the firm 
+ * 
+ */
 	double salary;
-	/** Lists former employees of the firm in order to form a basis for relevant net-works
-	in hiring */
+	
+/**
+ * Lists former employees of the firm in order to form a basis for relevant net-works
+ * in hiring.
+ */
 	ArrayList<Individual> pastWorkers;
-	/** Connects universities to firms through static relationships. */
+	
+/**
+ * Connects universities to firms through static relationships.
+ */
 	ArrayList<University> contacts;
 	
 	public Grid grid;
 	
-	/** Constructor of the class Firms.
-	@param salary Salary offered by the firm */
+/** Constructor of the class Firms.
+ *	@param salary Salary offered by the firm 
+ */
 	public Firms (Grid<Object> grid, double salary) {
 		this.grid = grid;
 		this.salary = salary;
@@ -39,8 +54,11 @@ public class Firms {
 	}
 	
 	// Methods
-	/** Returns the number of employees that a prospective employee "knows" at the firm 
-	@return float */
+	
+/**
+ * Returns the number of employees that a prospective employee "knows" at the firm. 
+ * @return float
+ */
 	public float numberAcquaintance(Individual i) {
 		int counter=0;
 		for(Individual j: i.socialNetwork) {
@@ -51,20 +69,27 @@ public class Firms {
 		
 		return counter;
 	}
-	/** Assigns a numeric value to a prospective employee based on expected talent and connections. 
-	This number is used to rank and hire employees.
-	Note: valuation is done in reverse number (most valuable worker has the smallest value) so to make easier the sorting of workers
-	@return double */
+	
+	
+/**
+ * Assigns a numeric value to a prospective employee based on expected talent and connections.
+ * This number is used to rank and hire employees.
+ * Note: valuation is done in reverse numbers (most valuable worker has the smallest value) so to make easier the sorting of workers.
+ * @return double
+ */
 	public double valIndividual(Individual i) {
 		if(i.parentEmployer == null) {
-			return -(i.talent - RandomHelper.nextDouble()*i.almaMater.varianceTalentDist);
+			return -(i.talent - Math.abs(RandomHelper.nextDouble()*i.almaMater.varianceTalentDist));
 		}
 		else {
-			return  -(i.talent - RandomHelper.nextDouble()*(1 - numberAcquaintance(i)/pastWorkers.size() )*i.almaMater.varianceTalentDist);
+			return  -(i.talent - Math.abs(RandomHelper.nextDouble()*(1 - numberAcquaintance(i)/pastWorkers.size() )*i.almaMater.varianceTalentDist));
 		}
 	} // End valIndividual
 
-	
+/**
+ * This method is used to sort, in descending order, a HashMap according to its (numeric) values.
+ * @return LinkedHashMap
+ */
 	public LinkedHashMap<Individual, Double> sortHashMapByValues(
 	        HashMap<Individual, Double> passedMap) {
 	    List<Individual> mapKeys = new ArrayList<>(passedMap.keySet());
@@ -98,10 +123,12 @@ public class Firms {
 	
 	
 
-	/** Hires workers. This method searches over workers and chooses the employees based on their value from valIndividual. 
-	The available prospects with the highest values are chosen, then taken out from consideration
-	for the rest of the firms hiring process. 
-	@return void */
+/**
+ * Hires workers. This method searches over workers and chooses the employees based on their value from valIndividual.
+ * The available prospects with the highest values are chosen, then taken out from consideration
+ * for the rest of the firms hiring process.
+ * @return void
+ */
 	@ScheduledMethod(start=1, interval=1, shuffle=false, priority=80)
 	public void hireWorkers() {
 		//ArrayList<Individual> remainingProspects= new ArrayList<Individual>();
@@ -113,10 +140,12 @@ public class Firms {
 				}
 			}
 		} // End for
+		
 		sortedWorkers = sortHashMapByValues(sortedWorkers);
 		int z=0;
 		for(HashMap.Entry<Individual, Double> entry: sortedWorkers.entrySet()) {
 			pastWorkers.add(entry.getKey());
+			entry.getKey().currentEmployer = this;
 			z++;
 			if(z==50) {
 				break;
