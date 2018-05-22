@@ -3,9 +3,11 @@ package aBMFinal;
 import java.util.ArrayList;
 import java.util.Random;
 
+import repast.simphony.context.Context;
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.random.RandomHelper;
 import repast.simphony.space.grid.Grid;
+import repast.simphony.util.ContextUtils;
 
 /** 
  * Class for all individuals which study, then work.
@@ -67,7 +69,7 @@ public class Individual {
  */
 	public Individual(Grid<Object> grid) {
 		RandomHelper.createChiSquare(2);
-		this.wealth = 5000*RandomHelper.getChiSquare().nextDouble();
+		this.wealth = 5000*RandomHelper.getChiSquare().nextDouble();	// TODO: We are also moving the variance by a lot... Is that ok?
 		// this.wealth = RandomHelper.nextDoubleFromTo(0, 10000);	//
 		
 		RandomHelper.createChiSquare(3);
@@ -98,11 +100,14 @@ public class Individual {
  * Then the individual adds the university as their alma mater and the university adds the individual as an alumni. 
  * @return University
  */
+	
+	//FIXME: null pointer exception
 	public University chooseUniversity() {
-		//TODO search grid only for universities
-		University choice=null;
-		for(Object u: grid.getObjects()) {
-			if (u.getClass() == University.class) { //TODO ask Florian D:
+		University choice = null;
+		Context myContext = ContextUtils.getContext(this);
+		
+		for(Object u:myContext) {
+			if (u instanceof University) {
 				if(choice == null && this.talent >= ((University) u).minTalent && this.wealth >= ((University) u).minWealth) {
 					choice=(University) u;
 				}
@@ -116,9 +121,33 @@ public class Individual {
 		
 		choice.alumni.add(this);
 		this.almaMater = choice;
-		
 		return choice;
-	} // End method
+		
+	}// End method
+	
+/*
+public University chooseUniversity() {
+	//TODO search grid only for universities
+	University choice=null;
+	for(Object u: grid.getObjects()) {
+		if (u.getClass() == University.class) { //TODO ask Florian D:
+			if(choice == null && this.talent >= ((University) u).minTalent && this.wealth >= ((University) u).minWealth) {
+				choice=(University) u;
+			}
+			else if(this.talent >= ((University) u).minTalent && this.wealth >= ((University) u).minWealth) {
+				if(valUniversity(choice) < valUniversity((University) u)) {
+					choice = (University) u;
+				}
+			}
+		} // End check class
+	} // End for
+		
+	choice.alumni.add(this);
+	this.almaMater = choice;
+		
+	return choice;
+} // End method
+*/
 	
 	
 /**
@@ -126,6 +155,22 @@ public class Individual {
  * of their university which is added to their initial talent.
  * @return void
  */
+	
+	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=100)
+	public void gainTalent() {
+		this.talent += RandomHelper.createNormal(almaMater.meanTalentDist, almaMater.varianceTalentDist).nextDouble();
+	}
+
+	
+	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=10)
+	public void deat() {
+		this.almaMater = null;
+		this.socialNetwork = null;
+		this.parentEmployer = this.currentEmployer;
+		this.currentEmployer = null;
+	}
+	
+/*
 	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=100)
 	public void gainTalent() {
 		University choice = chooseUniversity();
@@ -133,6 +178,7 @@ public class Individual {
 		this.talent += RandomHelper.getNormal().nextDouble();
 		// this.talent += random.nextGaussian()*choice.varianceTalentDist + choice.meanTalentDist;
 	}
+*/
 	
 	
 /**
@@ -141,6 +187,8 @@ public class Individual {
  * added to the social network as friends.
  * @return void
  */
+	
+/*
 	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=90)
 	public void makeFriends() {
 		for(Individual i:this.almaMater.alumni) {
@@ -149,6 +197,7 @@ public class Individual {
 			}
 		}
 	}
+*/
 
 
 } // End class

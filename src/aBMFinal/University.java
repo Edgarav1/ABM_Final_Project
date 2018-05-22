@@ -1,6 +1,9 @@
 package aBMFinal;
 
 import java.util.ArrayList;
+
+import repast.simphony.engine.schedule.ScheduledMethod;
+import repast.simphony.random.RandomHelper;
 import repast.simphony.space.grid.Grid;
 
 /**
@@ -57,6 +60,27 @@ public class University {
 		this.grid = grid;
 		this.alumni = new ArrayList<Individual>();
 		
+	}
+	
+	
+/**
+ * The individual makes friends at university, which serve as valuable connections based on their parent's current employer
+ * in the job search. Based on the probability of making friends a number of individuals are
+ * added to the social network as friends.
+ * @return void
+ */
+	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=90)
+	public void makeFriends() {
+		for(int i=0; i < this.alumni.size()-1;i++) {
+			this.alumni.get(i).socialNetwork.add(this.alumni.get(i));
+			
+			for(int j=i+1; j < this.alumni.size();j++) {
+				if(RandomHelper.nextDouble() <= University.probFriend) {
+					this.alumni.get(j).socialNetwork.add(this.alumni.get(i));
+					this.alumni.get(i).socialNetwork.add(this.alumni.get(j));
+				}
+			}
+		}
 	}
 	
 
