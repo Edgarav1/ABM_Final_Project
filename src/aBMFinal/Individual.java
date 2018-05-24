@@ -20,13 +20,16 @@ public class Individual {
 /** 
  * Gives the proportion of an individuals characteristics which are passed onto the next generation; wealth, talent, network.
  */
-	static float propInheritance;
+	static double propInheritance;
 	
 /** 
  * Risk aversion in choosing universities: Describes the amount which individuals discount a university's mean talent 
  * by its variance.
  */
-	static double riskAversion=0;
+	static final double riskAversion=0;
+	
+	
+	static double meanTalent;
 	
 /** 
  * Gives the wealth of the individual; at the start of his/her life wealth is an inherited proportion of their parent's wealth,
@@ -95,6 +98,12 @@ public class Individual {
 	}
 	
 	
+	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=1000)
+	public void resetMeanTalent() {
+		Individual.meanTalent=0;
+	}
+	
+	
 /**
  * After evaluating the universities, this method allows an individual to choose a university based on the maximum valuation.
  * Then the individual adds the university as their alma mater and the university adds the individual as an alumni. 
@@ -102,6 +111,7 @@ public class Individual {
  */
 	
 	//FIXME: null pointer exception
+	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=110)
 	public University chooseUniversity() {
 		University choice = null;
 		Context myContext = ContextUtils.getContext(this);
@@ -159,15 +169,62 @@ public University chooseUniversity() {
 	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=100)
 	public void gainTalent() {
 		this.talent += RandomHelper.createNormal(almaMater.meanTalentDist, almaMater.varianceTalentDist).nextDouble();
+		Individual.meanTalent = Individual.meanTalent + this.talent;
 	}
+	
 
 	
+	public double computeMeanTalent() {
+		double meanTalent = 0;
+		Context myContext = ContextUtils.getContext(this);
+		
+		for(Object u:myContext) {
+			if (u instanceof Individual) {
+				meanTalent = meanTalent + ((Individual) u).talent;
+			}
+		}
+		
+		meanTalent = meanTalent/1000;
+		
+		return meanTalent;
+	}
+	
+
+	
+	
+	
 	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=10)
-	public void deat() {
+	public void death() {
+		System.out.printf("%s, %s %n", this.wealth, this.talent);
+		
 		this.almaMater = null;
-		this.socialNetwork = null;
+		this.socialNetwork.clear();
 		this.parentEmployer = this.currentEmployer;
 		this.currentEmployer = null;
+		
+		this.wealth *= Individual.propInheritance;
+		
+
+		this.talent = this.talent*1000*50/Individual.meanTalent;
+		//Individual.meanTalent=0;
+		
+		//this.talent = this.talent*50/computeMeanTalent();
+		
+		System.out.printf("%s%n", Individual.meanTalent);
+		
+		System.out.printf("%s, %s %n", this.wealth, this.talent);
+		
+		if(this.wealth<0) {
+			this.wealth=0;
+		}
+		
+		if(this.talent<0) {
+			this.talent=0;
+		}
+		
+		System.out.printf("%s, %s %n%n", this.wealth, this.talent);
+		
+
 	}
 	
 /*
@@ -198,6 +255,14 @@ public University chooseUniversity() {
 		}
 	}
 */
+	
+public double getTalent() {
+		return this.talent;
+	}
+	
+public double getWealth() {
+		return this.wealth;
+	}
 
 
 } // End class

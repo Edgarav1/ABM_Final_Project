@@ -1,5 +1,7 @@
 package aBMFinal;
 
+import java.util.ArrayList;
+
 import repast.simphony.context.Context;
 import repast.simphony.context.space.grid.GridFactory;
 import repast.simphony.context.space.grid.GridFactoryFinder;
@@ -64,6 +66,11 @@ public class Builder implements ContextBuilder<Object> {
 		for(int i=0; i<20; i++) {
 			context.add(new Firms(grid, 10000-500*i));
 		}
+		
+		Individual.propInheritance=21;
+		Individual.propInheritance /= 40;
+		
+		Individual.meanTalent=0;
 		
 		
 		return context;

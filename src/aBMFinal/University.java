@@ -2,9 +2,11 @@ package aBMFinal;
 
 import java.util.ArrayList;
 
+import repast.simphony.context.Context;
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.random.RandomHelper;
 import repast.simphony.space.grid.Grid;
+import repast.simphony.util.ContextUtils;
 
 /**
  * University class generates all universities in the model which accept students based on minimum wealth and talent requirements.
@@ -15,27 +17,27 @@ public class University {
 /**
  * Minimum talent required to attend a university. Indicates academic level or rigor.
  */
-	double minTalent;
+	final double minTalent;
 
 /**
  * Minimum wealth required to attend a university. Indicates tuition costs.
  */
-	double minWealth;
+	final double minWealth;
 	
 /**
  * Gives the probability of making friends. A prob. that is constant for all schools implies that more friends will be made at bigger schools.
  */
-	static double probFriend = 0.5;
+	static final double probFriend = 0.5;
 	
 /**
  * The mean of talent that a university gives its students.
  */
-	double meanTalentDist;
+	final double meanTalentDist;
 	
 /**
  * Variance in the talent that a university gives its students.
  */
-	double varianceTalentDist;
+	final double varianceTalentDist;
 	
 /**
  * Alumni; individuals that have attended that school.
@@ -82,6 +84,17 @@ public class University {
 			}
 		}
 	}
+	
+	
+	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=5)
+	public void graduation() {
+		this.alumni.clear();
+	}
+	
+	public int numberAlumni() {
+		return this.alumni.size(); 
+	}
+	
 	
 
 } // End class

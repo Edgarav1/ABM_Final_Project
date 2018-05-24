@@ -36,6 +36,9 @@ public class Firms {
  */
 	ArrayList<Individual> pastWorkers;
 	
+	
+	ArrayList<Individual> currentWorkers;
+	
 /**
  * Connects universities to firms through static relationships.
  */
@@ -51,6 +54,7 @@ public class Firms {
 		this.salary = salary;
 		this.pastWorkers = new ArrayList<Individual>();
 		this.contacts = new ArrayList<University>();
+		this.currentWorkers = new ArrayList<Individual>();
 	}
 	
 	// Methods
@@ -144,8 +148,9 @@ public class Firms {
 		sortedWorkers = sortHashMapByValues(sortedWorkers);
 		int z=0;
 		for(HashMap.Entry<Individual, Double> entry: sortedWorkers.entrySet()) {
-			pastWorkers.add(entry.getKey());
+			this.currentWorkers.add(entry.getKey());
 			entry.getKey().currentEmployer = this;
+			entry.getKey().wealth += this.salary;
 			z++;
 			if(z==50) {
 				break;
@@ -167,6 +172,25 @@ public class Firms {
 		}
 	}
 */
+	
+	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=1)
+	public void fireAll() {
+		this.pastWorkers.clear();
+		
+		for(int i=0; i<this.currentWorkers.size();i++) {
+			this.pastWorkers.add(this.currentWorkers.get(i));
+		}
+		
+		this.currentWorkers.clear();
+	}
+	
+	public double averageTalentHired() {
+		double talentSum = 0;
+		for(int i=0; i<this.currentWorkers.size(); i++) {
+			talentSum += this.currentWorkers.get(i).talent;
+		}
+		return talentSum / this.currentWorkers.size();
+	}
 	
 	
 	
