@@ -25,10 +25,20 @@ public class Firms {
  */
 	double minVal;
 	
-/** Salary offered by the firm; salary is unique to the firm 
+	/*
+	 * Parameter that measures the importance of the network to firm evaluation
+	 */
+	static double networkImportance;
+	
+/** Salary offered by the firm; salary is unique to the individual
  * 
  */
-	double salary;
+	ArrayList<Double> allSalaries = new ArrayList<Double>();
+	
+	/*
+	 * markUp is what the firm offers as a mark up on the talent that a candidate is believed to have. 
+	 */
+	double markUp;
 	
 /**
  * Lists former employees of the firm in order to form a basis for relevant net-works
@@ -36,7 +46,10 @@ public class Firms {
  */
 	ArrayList<Individual> pastWorkers;
 	
-	
+	/**
+	 * Lists current employees of the firm in order to form a basis for relevant net-works
+	 * in hiring.
+	 */	
 	ArrayList<Individual> currentWorkers;
 	
 /**
@@ -45,17 +58,40 @@ public class Firms {
 	ArrayList<University> contacts;
 	
 	public Grid grid;
+	/*
+	 * allFirms groups all the firms into an ArrayList
+	 */
+	public ArrayList<Firms> allFirms = new ArrayList<Firms>();
 	
 /** Constructor of the class Firms.
  *	@param salary Salary offered by the firm 
  */
+
+	
+	/*
+	 * Original constructor !!!!!!!!!!!!!!!!!!!!!!!!!
+	 *
 	public Firms (Grid<Object> grid, double salary) {
 		this.grid = grid;
 		this.salary = salary;
 		this.pastWorkers = new ArrayList<Individual>();
 		this.contacts = new ArrayList<University>();
 		this.currentWorkers = new ArrayList<Individual>();
+		allFirms.add(this);
 	}
+	*/
+	
+	public Firms (Grid<Object> grid, double markUp) {
+		this.grid = grid;
+		this.markUp = markUp;
+		this.pastWorkers = new ArrayList<Individual>();
+		this.contacts = new ArrayList<University>();
+		this.currentWorkers = new ArrayList<Individual>();
+		allFirms.add(this);
+	}
+	
+	
+	
 	
 	// Methods
 	
@@ -83,10 +119,10 @@ public class Firms {
  */
 	public double valIndividual(Individual i) {
 		if(i.parentEmployer == null) {
-			return -(i.talent - Math.abs(RandomHelper.nextDouble()*i.almaMater.varianceTalentDist));
+			return -(i.talent - networkImportance*Math.abs(RandomHelper.nextDouble()*i.almaMater.varianceTalentDist));
 		}
 		else {
-			return  -(i.talent - Math.abs(RandomHelper.nextDouble()*(1 - numberAcquaintance(i)/pastWorkers.size() )*i.almaMater.varianceTalentDist));
+			return  -(i.talent - networkImportance*Math.abs(RandomHelper.nextDouble()*(1 - numberAcquaintance(i)/pastWorkers.size() )*i.almaMater.varianceTalentDist));
 		}
 	} // End valIndividual
 
@@ -150,7 +186,6 @@ public class Firms {
 		for(HashMap.Entry<Individual, Double> entry: sortedWorkers.entrySet()) {
 			this.currentWorkers.add(entry.getKey());
 			entry.getKey().currentEmployer = this;
-			entry.getKey().wealth += this.salary;
 			z++;
 			if(z==50) {
 				break;
@@ -163,6 +198,25 @@ public class Firms {
 		}
 */
 	} // End method
+	
+	@ScheduledMethod(start=1, interval=1, shuffle=false, priority=75)
+	public void paySalary() {
+		for(Individual i: this.currentWorkers) {
+			i.wealth = i.wealth + valIndividual(i)*markUp;
+			i.salary  = valIndividual(i)*markUp;
+			allSalaries.add(i.salary);
+		}
+		
+	}
+	
+	public double averageSalariesFirm() {
+		double averageSalaries = 0;
+		for(int i=0; i<allSalaries.size(); i++) {
+			averageSalaries += allSalaries.get(i);
+		}
+		averageSalaries = averageSalaries / allSalaries.size();
+		return averageSalaries;
+	}
 	
 /*
 	@ScheduledMethod(start=1, interval=1, shuffle=false, priority=20)

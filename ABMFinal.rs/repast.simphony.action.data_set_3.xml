@@ -1,10 +1,10 @@
 <repast.simphony.data2.engine.DataSetDescriptor simphonyVersion="2.5.0">
-  <name>NumberAlumni</name>
+  <name>DistributionMarkers</name>
   <type>NON_AGGREGATE</type>
-  <sourceType>aBMFinal.University</sourceType>
+  <sourceType>aBMFinal.Individual</sourceType>
   <inclTick>true</inclTick>
-  <inclBatchRun>false</inclBatchRun>
-  <inclRandomSeed>false</inclRandomSeed>
+  <inclBatchRun>true</inclBatchRun>
+  <inclRandomSeed>true</inclRandomSeed>
   <scheduleParams>
     <start>1.0</start>
     <interval>1.0</interval>
@@ -12,16 +12,24 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>-418667601</hashCode>
+    <hashCode>557119484</hashCode>
   </scheduleParams>
   <atEnd>false</atEnd>
   <methodDataSources class="linked-hash-map">
     <entry>
-      <string>numberAlumni</string>
+      <string>DistStart</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>numberAlumni</id>
-        <className>aBMFinal.University</className>
-        <methodName>numberAlumni</methodName>
+        <id>DistStart</id>
+        <className>aBMFinal.Individual</className>
+        <methodName>getDistStart</methodName>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
+    <entry>
+      <string>DistEnd</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>DistEnd</id>
+        <className>aBMFinal.Individual</className>
+        <methodName>getDistEnd</methodName>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>
     </entry>
   </methodDataSources>

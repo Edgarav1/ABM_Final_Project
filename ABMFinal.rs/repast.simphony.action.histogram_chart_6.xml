@@ -1,9 +1,9 @@
 <repast.simphony.chart2.engine.HistogramChartDescriptor simphonyVersion="2.5.0">
-  <name>Talent Hired (Average)</name>
-  <dataSet>TalentHired</dataSet>
+  <name>Talent Distribution</name>
+  <dataSet>Individual Talent, Wealth</dataSet>
   <xAxisLabel>Talent</xAxisLabel>
   <yAxisLabel>Density</yAxisLabel>
-  <chartTitle>Average Real Talent Hired</chartTitle>
+  <chartTitle>Talent Distribution</chartTitle>
   <type>HISTOGRAM</type>
   <background>
     <red>192</red>
@@ -21,7 +21,7 @@
   <showLegend>true</showLegend>
   <histType>DYNAMIC</histType>
   <binCount>10</binCount>
-  <sourceId>averageTalentHired</sourceId>
+  <sourceId>Talent</sourceId>
   <outOfRange>IGNORE</outOfRange>
   <min>0.0</min>
   <max>0.0</max>

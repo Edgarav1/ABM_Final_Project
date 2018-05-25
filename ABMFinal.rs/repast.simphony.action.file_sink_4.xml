@@ -1,0 +1,14 @@
+<repast.simphony.data2.engine.FileSinkDescriptor simphonyVersion="2.5.0">
+  <name>Project</name>
+  <dataSet>Salaries</dataSet>
+  <delimiter>,</delimiter>
+  <format>TABULAR</format>
+  <sourceIds class="linked-hash-set">
+    <string>Salary</string>
+    <string>tick</string>
+    <string>run</string>
+    <string>random_seed</string>
+  </sourceIds>
+  <fileName>ModelOutput.csv</fileName>
+  <addTimeStamp>false</addTimeStamp>
+</repast.simphony.data2.engine.FileSinkDescriptor>

@@ -2,10 +2,14 @@ package aBMFinal;
 
 import java.util.ArrayList;
 
+import com.sun.medialib.codec.jp2k.Params;
+
 import repast.simphony.context.Context;
 import repast.simphony.context.space.grid.GridFactory;
 import repast.simphony.context.space.grid.GridFactoryFinder;
 import repast.simphony.dataLoader.ContextBuilder;
+import repast.simphony.engine.environment.RunEnvironment;
+import repast.simphony.parameter.Parameters;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridBuilderParameters;
 import repast.simphony.space.grid.SimpleGridAdder;
@@ -71,6 +75,18 @@ public class Builder implements ContextBuilder<Object> {
 		Individual.propInheritance /= 40;
 		
 		Individual.meanTalent=0;
+		Individual.sumWealth=0;
+		
+		Parameters params = RunEnvironment.getInstance().getParameters();
+
+		Firms.networkImportance = params.getDouble("networkImportance");
+		
+		if(RunEnvironment.getInstance().isBatch()) {
+			
+			RunEnvironment.getInstance().endAt(100);
+		} else {
+			RunEnvironment.getInstance().pauseAt(10);
+		}
 		
 		
 		return context;

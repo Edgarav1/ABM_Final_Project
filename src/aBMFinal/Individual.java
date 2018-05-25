@@ -22,6 +22,22 @@ public class Individual {
  */
 	static double propInheritance;
 	
+	/*
+	 * Salary paid to the individual in that period. 
+	 */
+	double salary;
+	
+	/*
+	 * Marks where in the distribution the individual begins his or her life.
+	 */
+	int distributionStart;
+	
+	/*
+	 * Marks where in the distribution the individual ends his or her life. 
+	 */
+	int distributionEnd;
+	
+	static double sumWealth;
 /** 
  * Risk aversion in choosing universities: Describes the amount which individuals discount a university's mean talent 
  * by its variance.
@@ -103,14 +119,46 @@ public class Individual {
 		Individual.meanTalent=0;
 	}
 	
+	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=200)
+	public void distributionMarker() {
+		double wealthStartMean = 0;
+		Context myContext = ContextUtils.getContext(this);
+		
+		for(Object i:myContext) {
+			if(i instanceof Individual){
+				wealthStartMean = wealthStartMean + ((Individual) i).wealth;
+			}
+		}
+		wealthStartMean = wealthStartMean / 1000;
+		if(this.wealth < wealthStartMean) {
+		distributionStart = 1; 
+		} else {
+			distributionStart = 0;
+		}
+	} // end method
+	
+	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=15)
+	public void distributionEnder() {
+		if(this.wealth<Individual.sumWealth/1000) {
+			this.distributionEnd = 0;
+		} else {
+			this.distributionEnd = 1;
+		}
+	}
+	
+	public int getDistEnd() {
+		return this.distributionEnd;
+	}
+	
+	public int getDistStart() {
+		return this.distributionStart;
+	}
 	
 /**
  * After evaluating the universities, this method allows an individual to choose a university based on the maximum valuation.
  * Then the individual adds the university as their alma mater and the university adds the individual as an alumni. 
  * @return University
  */
-	
-	//FIXME: null pointer exception
 	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=110)
 	public University chooseUniversity() {
 		University choice = null;
@@ -189,8 +237,28 @@ public University chooseUniversity() {
 		return meanTalent;
 	}
 	
-
+	public double computeMeanSalaries() {
+		double meanSalary = 0;
+		Context myContext = ContextUtils.getContext(this);
+		
+		for(Object m:myContext) {
+			if(m instanceof Firms) {
+				meanSalary = meanSalary + ((Firms) m).averageSalariesFirm();
+			} // end if that searches for firms
+		} // end for looping over objects
+		
+		meanSalary = meanSalary/20;
+		
+		return meanSalary;
+		
+	}
 	
+
+	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=72)
+	public void sumWealth() {
+		Individual.sumWealth = Individual.sumWealth + this.wealth;
+		System.out.printf("%s", sumWealth);
+	}
 	
 	
 	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=10)
@@ -202,9 +270,9 @@ public University chooseUniversity() {
 		this.parentEmployer = this.currentEmployer;
 		this.currentEmployer = null;
 		
-		this.wealth *= Individual.propInheritance;
-		
-
+		// this.wealth *= Individual.propInheritance;
+		this.wealth = this.wealth*5000*1000/Individual.sumWealth;
+	
 		this.talent = this.talent*1000*50/Individual.meanTalent;
 		//Individual.meanTalent=0;
 		
@@ -263,6 +331,9 @@ public double getTalent() {
 public double getWealth() {
 		return this.wealth;
 	}
+public double getSalary() {
+	return this.salary;
+}
 
 
 } // End class

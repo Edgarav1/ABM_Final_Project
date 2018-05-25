@@ -1,10 +1,10 @@
 <repast.simphony.data2.engine.DataSetDescriptor simphonyVersion="2.5.0">
-  <name>Individual Talent, Wealth</name>
+  <name>NumberAlumni</name>
   <type>NON_AGGREGATE</type>
-  <sourceType>aBMFinal.Individual</sourceType>
+  <sourceType>aBMFinal.University</sourceType>
   <inclTick>true</inclTick>
-  <inclBatchRun>false</inclBatchRun>
-  <inclRandomSeed>false</inclRandomSeed>
+  <inclBatchRun>true</inclBatchRun>
+  <inclRandomSeed>true</inclRandomSeed>
   <scheduleParams>
     <start>1.0</start>
     <interval>1.0</interval>
@@ -12,24 +12,16 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>-350844198</hashCode>
+    <hashCode>-418667601</hashCode>
   </scheduleParams>
   <atEnd>false</atEnd>
   <methodDataSources class="linked-hash-map">
     <entry>
-      <string>Talent</string>
+      <string>numberAlumni</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>Talent</id>
-        <className>aBMFinal.Individual</className>
-        <methodName>getTalent</methodName>
-      </repast.simphony.data2.engine.MethodDataSourceDefinition>
-    </entry>
-    <entry>
-      <string>Wealth</string>
-      <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>Wealth</id>
-        <className>aBMFinal.Individual</className>
-        <methodName>getWealth</methodName>
+        <id>numberAlumni</id>
+        <className>aBMFinal.University</className>
+        <methodName>numberAlumni</methodName>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>
     </entry>
   </methodDataSources>
