@@ -1,1 +1,1 @@
-<?xml version="1.0" ?><sweep runs="1"><parameter name="randomSeed" type="number" number_type="int" start="1" end="20" step="1"><parameter name="networkImportance" type="list" value_type="double" values="0 0.5 1"></parameter></parameter></sweep>
+<?xml version="1.0" ?><sweep runs="1"><parameter name="randomSeed" type="number" number_type="int" start="1" end="5" step="1"><parameter name="networkImportance" type="list" value_type="double" values="0 1"></parameter></parameter></sweep>

@@ -25,19 +25,19 @@ public class Firms {
  */
 	double minVal;
 	
-	/*
-	 * Parameter that measures the importance of the network to firm evaluation
-	 */
+/**
+ * Parameter that measures the importance of the network to firm evaluation
+ */
 	static double networkImportance;
 	
-/** Salary offered by the firm; salary is unique to the individual
- * 
+/**
+ * List of salaries paid by the firms to its workers.
  */
 	ArrayList<Double> allSalaries = new ArrayList<Double>();
 	
-	/*
-	 * markUp is what the firm offers as a mark up on the talent that a candidate is believed to have. 
-	 */
+/**
+ * markUp is what the firm offers as a mark up on the talent that a candidate is believed to have. 
+ */
 	double markUp;
 	
 /**
@@ -46,10 +46,10 @@ public class Firms {
  */
 	ArrayList<Individual> pastWorkers;
 	
-	/**
-	 * Lists current employees of the firm in order to form a basis for relevant net-works
-	 * in hiring.
-	 */	
+/**
+ * Lists current employees of the firm in order to form a basis for relevant net-works
+ * in hiring.
+ */	
 	ArrayList<Individual> currentWorkers;
 	
 /**
@@ -58,15 +58,12 @@ public class Firms {
 	ArrayList<University> contacts;
 	
 	public Grid grid;
-	/*
-	 * allFirms groups all the firms into an ArrayList
-	 */
+	
+/**
+ * allFirms groups all the firms into an ArrayList
+ */
 	public ArrayList<Firms> allFirms = new ArrayList<Firms>();
 	
-/** Constructor of the class Firms.
- *	@param salary Salary offered by the firm 
- */
-
 	
 	/*
 	 * Original constructor !!!!!!!!!!!!!!!!!!!!!!!!!
@@ -81,6 +78,10 @@ public class Firms {
 	}
 	*/
 	
+/** Constructor of the class Firms.
+ * @param grid
+ *	@param markUp mark up on the believed talent that the firm offers to its employees
+ */
 	public Firms (Grid<Object> grid, double markUp) {
 		this.grid = grid;
 		this.markUp = markUp;
@@ -126,6 +127,7 @@ public class Firms {
 		}
 	} // End valIndividual
 
+
 /**
  * This method is used to sort, in descending order, a HashMap according to its (numeric) values.
  * @return LinkedHashMap
@@ -164,10 +166,9 @@ public class Firms {
 	
 
 /**
- * Hires workers. This method searches over workers and chooses the employees based on their value from valIndividual.
+ * This method searches over workers and chooses the employees based on their value from valIndividual.
  * The available prospects with the highest values are chosen, then taken out from consideration
  * for the rest of the firms hiring process.
- * @return void
  */
 	@ScheduledMethod(start=1, interval=1, shuffle=false, priority=80)
 	public void hireWorkers() {
@@ -199,16 +200,26 @@ public class Firms {
 */
 	} // End method
 	
+	
+/**
+ * This method adds the mark up times 1000 onto each worker's believed talent to its wealth.
+ * Note: since valIndividual was made negative to sort workers, we take minus this values.
+ * Note: We multiply the mark up times 1000 to make it relevant in terms of average wealth.
+ */
 	@ScheduledMethod(start=1, interval=1, shuffle=false, priority=75)
 	public void paySalary() {
 		for(Individual i: this.currentWorkers) {
-			i.wealth = i.wealth + valIndividual(i)*markUp;
-			i.salary  = valIndividual(i)*markUp;
+			i.wealth = i.wealth - 1000*valIndividual(i)*markUp;
+			i.salary  = -1000*valIndividual(i)*markUp;
 			allSalaries.add(i.salary);
 		}
 		
 	}
-	
+
+/**
+ * This method computes the average salaries paid by a firm to its workers
+ * @return double
+ */
 	public double averageSalariesFirm() {
 		double averageSalaries = 0;
 		for(int i=0; i<allSalaries.size(); i++) {
@@ -217,6 +228,7 @@ public class Firms {
 		averageSalaries = averageSalaries / allSalaries.size();
 		return averageSalaries;
 	}
+
 	
 /*
 	@ScheduledMethod(start=1, interval=1, shuffle=false, priority=20)
@@ -227,6 +239,11 @@ public class Firms {
 	}
 */
 	
+/**
+ * This method first clears the list of past workers of the firm (they retire),
+ * then current workers are moved onto past workers and we clear current workers
+ * to make space for the next generation of employees.
+ */
 	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=1)
 	public void fireAll() {
 		this.pastWorkers.clear();
@@ -238,6 +255,7 @@ public class Firms {
 		this.currentWorkers.clear();
 	}
 	
+/*
 	public double averageTalentHired() {
 		double talentSum = 0;
 		for(int i=0; i<this.currentWorkers.size(); i++) {
@@ -245,6 +263,7 @@ public class Firms {
 		}
 		return talentSum / this.currentWorkers.size();
 	}
+*/
 	
 	
 	

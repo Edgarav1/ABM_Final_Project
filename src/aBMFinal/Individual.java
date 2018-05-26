@@ -22,29 +22,37 @@ public class Individual {
  */
 	static double propInheritance;
 	
-	/*
-	 * Salary paid to the individual in that period. 
-	 */
+/*
+ * Salary paid to the individual in that period. 
+ */
 	double salary;
 	
-	/*
-	 * Marks where in the distribution the individual begins his or her life.
-	 */
+/**
+ * Marks where in the distribution the individual begins his or her life.
+ */
 	int distributionStart;
 	
-	/*
-	 * Marks where in the distribution the individual ends his or her life. 
-	 */
+/**
+ * Marks where in the distribution the individual ends his or her life. 
+ */
 	int distributionEnd;
 	
+/**
+ * This variable is used to compute the mean of the wealth distribution
+ * among individuals.
+ */
 	static double sumWealth;
+	
 /** 
  * Risk aversion in choosing universities: Describes the amount which individuals discount a university's mean talent 
  * by its variance.
  */
 	static final double riskAversion=0;
 	
-	
+/**
+ * This variable is used to compute the mean of the talent distribution
+ * among individuals.
+*/
 	static double meanTalent;
 	
 /** 
@@ -113,14 +121,34 @@ public class Individual {
 		return u.meanTalentDist - riskAversion*u.varianceTalentDist;
 	}
 	
-	
+/**
+ * This method resets, each period, the variables that keep track of the talent and wealth distributions means.
+ * @return void
+ */
 	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=1000)
-	public void resetMeanTalent() {
-		Individual.meanTalent=0;
+	public void resetMeanTalentAndWealth() {
+		Individual.meanTalent = 0;
+		Individual.sumWealth = 0;
 	}
 	
+	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=210)
+	public void sumWealthStart() {
+		Individual.sumWealth = Individual.sumWealth * this.wealth;
+	}
+	
+/**
+ * This method computes if an individual is below or above the wealth mean at the start of each period.
+ * @return void
+ */
 	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=200)
 	public void distributionMarker() {
+		if(this.wealth < Individual.sumWealth/1000) {
+			distributionStart=0;
+		}
+		else {
+			distributionStart=1;
+		}
+/*
 		double wealthStartMean = 0;
 		Context myContext = ContextUtils.getContext(this);
 		
@@ -135,8 +163,18 @@ public class Individual {
 		} else {
 			distributionStart = 0;
 		}
+*/
 	} // end method
 	
+	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=190)
+	public void resetSumWealthStart() {
+		Individual.sumWealth = 0;
+	}
+	
+/**
+ * This method computes if an individual is below or above the wealth mean at the end of each period.
+ * @return void
+ */
 	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=15)
 	public void distributionEnder() {
 		if(this.wealth<Individual.sumWealth/1000) {
@@ -146,10 +184,20 @@ public class Individual {
 		}
 	}
 	
+/**
+ * This method returns the value 0 if and individual is below the wealth distribution at the start
+ * of the period or 1 otherwise.
+ * @return int
+ */
 	public int getDistEnd() {
 		return this.distributionEnd;
 	}
 	
+/**
+ * This method returns the value 0 if and individual is below the wealth distribution at the end
+ * of the period or 1 otherwise.
+ * @return int
+ */
 	public int getDistStart() {
 		return this.distributionStart;
 	}
@@ -213,15 +261,17 @@ public University chooseUniversity() {
  * of their university which is added to their initial talent.
  * @return void
  */
-	
 	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=100)
 	public void gainTalent() {
 		this.talent += RandomHelper.createNormal(almaMater.meanTalentDist, almaMater.varianceTalentDist).nextDouble();
 		Individual.meanTalent = Individual.meanTalent + this.talent;
 	}
-	
 
 	
+/**
+ * This method computes the talent distribution mean.
+ * @return double
+ */
 	public double computeMeanTalent() {
 		double meanTalent = 0;
 		Context myContext = ContextUtils.getContext(this);
@@ -237,6 +287,11 @@ public University chooseUniversity() {
 		return meanTalent;
 	}
 	
+	
+/**
+ * This method computes the mean of salaries paid by all firms.
+ * @return double
+ */
 	public double computeMeanSalaries() {
 		double meanSalary = 0;
 		Context myContext = ContextUtils.getContext(this);
@@ -253,14 +308,27 @@ public University chooseUniversity() {
 		
 	}
 	
-
+/**
+ * This method is used to compute the sum of all individuals' wealth and then this value
+ * is used to compute the mean of the wealth distribution.
+ * @return void
+ */
 	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=72)
 	public void sumWealth() {
 		Individual.sumWealth = Individual.sumWealth + this.wealth;
 		System.out.printf("%s", sumWealth);
 	}
 	
-	
+/**
+ * This method represents the passing of an Individual characteristics onto her offspring.
+ * First, we clear an individual alma mater an her social network of friends.
+ * Then, we move the individual current employer onto former employer and empty current employer.
+ * Afterwards, the individual inherits part of her wealth and talent to her offspring.
+ * Note: the values are modifies so that the mean of the distribution of wealth and talent remain
+ * the same as in the initialization. Also, if either wealth or talent happen to take on negative
+ * values, we change this and set them to zero.
+ * @return void
+ */
 	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=10)
 	public void death() {
 		System.out.printf("%s, %s %n", this.wealth, this.talent);
@@ -306,13 +374,6 @@ public University chooseUniversity() {
 */
 	
 	
-/**
- * The individual makes friends at university, which serve as valuable connections based on their parent's current employer
- * in the job search. Based on the probability of making friends and the size of the university, a number of individuals are
- * added to the social network as friends.
- * @return void
- */
-	
 /*
 	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=90)
 	public void makeFriends() {
@@ -323,17 +384,32 @@ public University chooseUniversity() {
 		}
 	}
 */
-	
-public double getTalent() {
+
+/**
+ * This method gets the individual's (true) talent.
+ * @return double
+ */
+	public double getTalent() {
 		return this.talent;
 	}
 	
-public double getWealth() {
+
+/**
+ * This method gets the individual's wealth.
+ * @return double
+ */
+	public double getWealth() {
 		return this.wealth;
 	}
-public double getSalary() {
-	return this.salary;
-}
+
+
+/**
+ * This method gets the individual's salary.
+ * @return double
+ */
+	public double getSalary() {
+		return this.salary;
+	}
 
 
 } // End class

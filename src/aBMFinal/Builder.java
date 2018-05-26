@@ -68,7 +68,7 @@ public class Builder implements ContextBuilder<Object> {
 		
 */
 		for(int i=0; i<20; i++) {
-			context.add(new Firms(grid, 10000-500*i));
+			context.add(new Firms(grid, 2-0.05*i));
 		}
 		
 		Individual.propInheritance=21;
@@ -84,7 +84,8 @@ public class Builder implements ContextBuilder<Object> {
 		if(RunEnvironment.getInstance().isBatch()) {
 			
 			RunEnvironment.getInstance().endAt(100);
-		} else {
+		}
+		else {
 			RunEnvironment.getInstance().pauseAt(10);
 		}
 		

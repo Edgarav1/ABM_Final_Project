@@ -1,5 +1,5 @@
 <repast.simphony.data2.engine.DataSetDescriptor simphonyVersion="2.5.0">
-  <name>Individual Talent, Wealth</name>
+  <name>Datos</name>
   <type>NON_AGGREGATE</type>
   <sourceType>aBMFinal.Individual</sourceType>
   <inclTick>true</inclTick>
@@ -12,10 +12,34 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>-350844198</hashCode>
+    <hashCode>1056802368</hashCode>
   </scheduleParams>
   <atEnd>false</atEnd>
   <methodDataSources class="linked-hash-map">
+    <entry>
+      <string>DistEnd</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>DistEnd</id>
+        <className>aBMFinal.Individual</className>
+        <methodName>getDistEnd</methodName>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
+    <entry>
+      <string>DistStart</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>DistStart</id>
+        <className>aBMFinal.Individual</className>
+        <methodName>getDistStart</methodName>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
+    <entry>
+      <string>Salary</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>Salary</id>
+        <className>aBMFinal.Individual</className>
+        <methodName>getSalary</methodName>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
     <entry>
       <string>Talent</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>

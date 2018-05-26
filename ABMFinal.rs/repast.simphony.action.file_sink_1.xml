@@ -1,0 +1,18 @@
+<repast.simphony.data2.engine.FileSinkDescriptor simphonyVersion="2.5.0">
+  <name>Lo que sea</name>
+  <dataSet>Datos</dataSet>
+  <delimiter>,</delimiter>
+  <format>TABULAR</format>
+  <sourceIds class="linked-hash-set">
+    <string>DistEnd</string>
+    <string>DistStart</string>
+    <string>Salary</string>
+    <string>Talent</string>
+    <string>Wealth</string>
+    <string>tick</string>
+    <string>run</string>
+    <string>random_seed</string>
+  </sourceIds>
+  <fileName>ModelOutput.csv</fileName>
+  <addTimeStamp>true</addTimeStamp>
+</repast.simphony.data2.engine.FileSinkDescriptor>

@@ -40,7 +40,7 @@ public class University {
 	final double varianceTalentDist;
 	
 /**
- * Alumni; individuals that have attended that school.
+ * List of individuals that have attended that school.
  */
 	ArrayList<Individual> alumni;
 	
@@ -69,6 +69,7 @@ public class University {
  * The individual makes friends at university, which serve as valuable connections based on their parent's current employer
  * in the job search. Based on the probability of making friends a number of individuals are
  * added to the social network as friends.
+ * Note: all friendships are reciprocal.
  * @return void
  */
 	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=90)
@@ -85,12 +86,19 @@ public class University {
 		}
 	}
 	
-	
+/**
+ * The university graduates its students and clears the alumni list to make space
+ * for the next generation.
+ * @return void	
+ */
 	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=5)
 	public void graduation() {
 		this.alumni.clear();
 	}
-	
+/**
+ * This method calculates the number of students enrolled in the university
+ * @return int
+ */
 	public int numberAlumni() {
 		return this.alumni.size(); 
 	}
