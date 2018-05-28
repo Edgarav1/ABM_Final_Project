@@ -30,50 +30,58 @@ public class Builder implements ContextBuilder<Object> {
 		for(int i=0; i<1000; i++) {
 			context.add(new Individual(grid));
 		}
-/*
-		for(int i=0; i<10; i++) {
-			context.add(new University(grid));
-		}
-*/
-		 //(minTalent, minWealth, meanTalentDist, varianceTalentdist)
-		
-		context.add(new University(grid, 0, 0, 0, 10)); // IPN
-		
-		context.add(new University(grid, 50, 0, 50, 50)); // UNAM
-		
-		context.add(new University(grid, 80, 8000, 50, 10)); // ITAM
-		
-		context.add(new University(grid, 30, 8000, 10, 10)); // Anahuac
-		
-		context.add(new University(grid, 80, 5000, 30, 20)); // Ibero
 
-/*
-		ArrayList<University> Campuses = new ArrayList<University>();
+		int scenario=1;		// We can change the characteristics of the universities by changing this value.
 		
-		University IPN = new University(grid, 0, 0, 0, 10);
-		Campuses.add(IPN);
+		// Add universities
+		//(minTalent, minWealth, meanTalentDist, varianceTalentdist)
 		
-		University UNAM = new University(grid, 20, 0, 50, 50);
-		Campuses.add(UNAM);
+		switch(scenario) {
+
+		case 1: // Original
+			context.add(new University(grid, 0, 0, 0, 10)); // IPN
+			context.add(new University(grid, 50, 0, 50, 50)); // UNAM
+			context.add(new University(grid, 80, 8000, 51, 10)); // ITAM
+			context.add(new University(grid, 30, 8000, 10, 10)); // Anahuac
+			context.add(new University(grid, 80, 5000, 30, 20)); // Ibero
+			break;
 		
-		University ITAM = new University(grid, 40, 80, 50, 10);
-		Campuses.add(ITAM);
+		case 2: // Less spread in talent distribution
+			context.add(new University(grid, 0, 0, 10, 10)); // IPN
+			context.add(new University(grid, 50, 0, 35, 50)); // UNAM
+			context.add(new University(grid, 80, 8000, 40, 10)); // ITAM
+			context.add(new University(grid, 30, 8000, 15, 10)); // Anahuac
+			context.add(new University(grid, 80, 5000, 30, 20)); // Ibero
+			break;
+	
+		case 3: // Lower talent barriers
+			context.add(new University(grid, 0, 0, 0, 10)); // IPN
+			context.add(new University(grid, 40, 0, 50, 50)); // UNAM
+			context.add(new University(grid, 60, 8000, 51, 10)); // ITAM
+			context.add(new University(grid, 30, 8000, 10, 10)); // Anahuac
+			context.add(new University(grid, 80, 5000, 30, 20)); // Ibero
+			break;
 		
-		University Anahuac = new University(grid, 10, 80, 10, 10);
-		Campuses.add(Anahuac);
+		case 4: // Both
+			context.add(new University(grid, 0, 0, 10, 10)); // IPN
+			context.add(new University(grid, 40, 0, 35, 50)); // UNAM
+			context.add(new University(grid, 60, 8000, 40, 10)); // ITAM
+			context.add(new University(grid, 30, 8000, 15, 10)); // Anahuac
+			context.add(new University(grid, 80, 5000, 30, 20)); // Ibero
+			break;
+			
+		default:
+			break;
+		} // End switch
+
 		
-		University Ibero = new University(grid, 40, 50, 30, 20);
-		Campuses.add(Ibero);
-		
-		
-*/
+		// Add firms
 		for(int i=0; i<20; i++) {
 			context.add(new Firms(grid, 2-0.05*i));
 		}
 		
-		Individual.propInheritance=21;
-		Individual.propInheritance /= 40;
 		
+		// Define scalars and parameters
 		Individual.meanTalent=0;
 		Individual.sumWealth=0;
 		
@@ -81,9 +89,11 @@ public class Builder implements ContextBuilder<Object> {
 
 		Firms.networkImportance = params.getDouble("networkImportance");
 		
+		
+		// Define batch parameters
 		if(RunEnvironment.getInstance().isBatch()) {
 			
-			RunEnvironment.getInstance().endAt(100);
+			RunEnvironment.getInstance().endAt(10);
 		}
 		else {
 			RunEnvironment.getInstance().pauseAt(10);
@@ -92,10 +102,8 @@ public class Builder implements ContextBuilder<Object> {
 		
 		return context;
 		
-	}
+	} // End main
 	
-	
-
 	
 
 } // End class

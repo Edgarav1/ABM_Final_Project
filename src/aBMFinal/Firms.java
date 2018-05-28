@@ -21,12 +21,12 @@ public class Firms {
 	// Instance variables
 	
 /** 
- * Gives the minimum value a worker must have in order to work at a given firm 
+ * Gives the minimum value a worker must have in order to work at a given firm.
  */
 	double minVal;
 	
 /**
- * Parameter that measures the importance of the network to firm evaluation
+ * Parameter that measures the importance of the network to firm evaluation.
  */
 	static double networkImportance;
 	
@@ -64,19 +64,6 @@ public class Firms {
  */
 	public ArrayList<Firms> allFirms = new ArrayList<Firms>();
 	
-	
-	/*
-	 * Original constructor !!!!!!!!!!!!!!!!!!!!!!!!!
-	 *
-	public Firms (Grid<Object> grid, double salary) {
-		this.grid = grid;
-		this.salary = salary;
-		this.pastWorkers = new ArrayList<Individual>();
-		this.contacts = new ArrayList<University>();
-		this.currentWorkers = new ArrayList<Individual>();
-		allFirms.add(this);
-	}
-	*/
 	
 /** Constructor of the class Firms.
  * @param grid
@@ -193,11 +180,6 @@ public class Firms {
 			}
 			
 		}
-/*
-		for(HashMap.Entry<Individual, Double> entry2: sortedWorkers.entrySet()) {
-			System.out.println(entry2.getKey() + "/" + entry2.getValue());
-		}
-*/
 	} // End method
 	
 	
@@ -230,15 +212,6 @@ public class Firms {
 	}
 
 	
-/*
-	@ScheduledMethod(start=1, interval=1, shuffle=false, priority=20)
-	public void printHiredWorkers() {
-		for (Individual i: pastWorkers) {
-			System.out.printf("%s", valIndividual(i));
-		}
-	}
-*/
-	
 /**
  * This method first clears the list of past workers of the firm (they retire),
  * then current workers are moved onto past workers and we clear current workers
@@ -254,17 +227,6 @@ public class Firms {
 		
 		this.currentWorkers.clear();
 	}
-	
-/*
-	public double averageTalentHired() {
-		double talentSum = 0;
-		for(int i=0; i<this.currentWorkers.size(); i++) {
-			talentSum += this.currentWorkers.get(i).talent;
-		}
-		return talentSum / this.currentWorkers.size();
-	}
-*/
-	
 	
 	
 } // End class

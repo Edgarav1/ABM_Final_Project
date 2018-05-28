@@ -17,11 +17,6 @@ public class Individual {
 
 	// Instance Variables
 	
-/** 
- * Gives the proportion of an individuals characteristics which are passed onto the next generation; wealth, talent, network.
- */
-	static double propInheritance;
-	
 /*
  * Salary paid to the individual in that period. 
  */
@@ -96,12 +91,10 @@ public class Individual {
  */
 	public Individual(Grid<Object> grid) {
 		RandomHelper.createChiSquare(2);
-		this.wealth = 5000*RandomHelper.getChiSquare().nextDouble();	// TODO: We are also moving the variance by a lot... Is that ok?
-		// this.wealth = RandomHelper.nextDoubleFromTo(0, 10000);	//
+		this.wealth = 5000*RandomHelper.getChiSquare().nextDouble();
 		
 		RandomHelper.createChiSquare(3);
 		this.talent = 50*RandomHelper.getChiSquare().nextDouble()/3;
-		// this.talent = RandomHelper.nextDoubleFromTo(0, 100);	// TODO Pareto
 		
 		this.grid = grid;
 		
@@ -148,22 +141,6 @@ public class Individual {
 		else {
 			distributionStart=1;
 		}
-/*
-		double wealthStartMean = 0;
-		Context myContext = ContextUtils.getContext(this);
-		
-		for(Object i:myContext) {
-			if(i instanceof Individual){
-				wealthStartMean = wealthStartMean + ((Individual) i).wealth;
-			}
-		}
-		wealthStartMean = wealthStartMean / 1000;
-		if(this.wealth < wealthStartMean) {
-		distributionStart = 1; 
-		} else {
-			distributionStart = 0;
-		}
-*/
 	} // end method
 	
 	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=190)
@@ -230,30 +207,6 @@ public class Individual {
 		return choice;
 		
 	}// End method
-	
-/*
-public University chooseUniversity() {
-	//TODO search grid only for universities
-	University choice=null;
-	for(Object u: grid.getObjects()) {
-		if (u.getClass() == University.class) { //TODO ask Florian D:
-			if(choice == null && this.talent >= ((University) u).minTalent && this.wealth >= ((University) u).minWealth) {
-				choice=(University) u;
-			}
-			else if(this.talent >= ((University) u).minTalent && this.wealth >= ((University) u).minWealth) {
-				if(valUniversity(choice) < valUniversity((University) u)) {
-					choice = (University) u;
-				}
-			}
-		} // End check class
-	} // End for
-		
-	choice.alumni.add(this);
-	this.almaMater = choice;
-		
-	return choice;
-} // End method
-*/
 	
 	
 /**
@@ -363,27 +316,7 @@ public University chooseUniversity() {
 
 	}
 	
-/*
-	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=100)
-	public void gainTalent() {
-		University choice = chooseUniversity();
-		RandomHelper.createNormal(almaMater.meanTalentDist, almaMater.varianceTalentDist);
-		this.talent += RandomHelper.getNormal().nextDouble();
-		// this.talent += random.nextGaussian()*choice.varianceTalentDist + choice.meanTalentDist;
-	}
-*/
 	
-	
-/*
-	@ScheduledMethod(start=1, interval=1, shuffle=true, priority=90)
-	public void makeFriends() {
-		for(Individual i:this.almaMater.alumni) {
-			if(RandomHelper.nextDouble() <= University.probFriend) {
-				this.socialNetwork.add(i);
-			}
-		}
-	}
-*/
 
 /**
  * This method gets the individual's (true) talent.
